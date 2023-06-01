@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import entities from './typeorm';
+import { PaywallModule } from './modules/paywall/paywall.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import entities from './typeorm';
       }),
       inject: [ConfigService],
     }),
+    PaywallModule,
   ],
   controllers: [AppController],
   providers: [AppService],
