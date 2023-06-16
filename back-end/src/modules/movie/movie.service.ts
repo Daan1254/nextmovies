@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from '../../typeorm';
 import { Repository } from 'typeorm';
+import { CreateEditMovieDto } from './dto/create-edit-movie.dto';
+import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
 
 @Injectable()
 export class MovieService {
@@ -26,5 +28,25 @@ export class MovieService {
 
   async getMovies() {
     return await this.movieRepository.find();
+  }
+
+  async createMovie(body: CreateEditMovieDto) {
+    const movie = await this.movieRepository.create({
+      ...body,
+    });
+
+    if (!movie) {
+      throw new BadRequestException('Movie not created');
+    }
+
+    return await this.movieRepository.save(movie);
+  }
+
+  async updateMovie(body: CreateEditMovieDto, uuid: string) {
+    const movie = await this.movieRepository.findOne({
+      where: {
+        uuid,
+      },
+    });
   }
 }
