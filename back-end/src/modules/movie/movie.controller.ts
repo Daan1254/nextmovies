@@ -2,6 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MovieService } from './movie.service';
 import {
+  Delete,
   Post,
   Put,
 } from '@nestjs/common/decorators/http/request-mapping.decorator';
@@ -33,6 +34,11 @@ export class MovieController {
     @Param('uuid') uuid: string,
   ) {
     return await this.movieService.updateMovie(body, uuid);
+  }
+
+  @Delete(':uuid')
+  async deleteMovie(@Param('uuid') uuid: string) {
+    return await this.movieService.deleteMovie(uuid);
   }
 
   @Get()

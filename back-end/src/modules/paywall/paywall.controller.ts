@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { PaywallService } from './paywall.service';
 import { StripeWebhookBody } from './dto/stripe-body.dto';
@@ -7,11 +7,6 @@ import { StripeWebhookBody } from './dto/stripe-body.dto';
 @ApiTags('Paywall')
 export class PaywallController {
   constructor(private readonly paywallService: PaywallService) {}
-
-  @Get()
-  async createPayment() {
-    // return await this.paywallService.createPayment();
-  }
 
   @ApiExcludeEndpoint()
   @Post('webhook')

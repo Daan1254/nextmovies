@@ -77,26 +77,26 @@ export class OrderService {
     return payment.url;
   }
 
-  async updateOrder(id: string, type: string) {
+  async updateOrderStatus(status: OrderStatus, id: string) {
     const order = await this.orderRepository.findOne({
       where: { stripeId: id },
       relations: ['user'],
     });
-    switch (type) {
-      case 'checkout.session.completed': {
-        order.status = OrderStatus.COMPLETED;
-        await this.bravoMailService.sendMail(
-          order.user.email,
-          'Thanks for your order at NextMovies',
-          process.env.FRONT_END_URL + '/order/' + order.uuid,
-        );
-        return await this.orderRepository.save(order);
-      }
-      default: {
-        order.status = OrderStatus.FAILED;
-        await this.roomService.removeSeats(order.seats);
-        return await this.orderRepository.softDelete(order);
-      }
+    order.status = status;
+
+    if (status === OrderStatus.COMPLETED) {
+      await this.bravoMailService.sendMail(
+        order.user.email,
+        'Thanks for your order at NextMovies',
+        process.env.FRONT_END_URL + '/order/' + order.uuid,
+      );
+    }
+
+    if (status === OrderStatus.FAILED) {
+      return await this.orderRepository.save(order);
+
+      await this.roomService.removeSeats(order.seats);
+      return await this.orderRepository.softDelete(order);
     }
   }
 }

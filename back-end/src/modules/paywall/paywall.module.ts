@@ -1,7 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { StripeModule } from 'nestjs-stripe';
 import * as process from 'process';
-import { PaywallController } from './paywall.controller';
 import { PaywallService } from './paywall.service';
 import { OrderModule } from '../order/order.module';
 
@@ -14,7 +13,7 @@ import { OrderModule } from '../order/order.module';
     }),
     forwardRef(() => OrderModule),
   ],
-  controllers: [PaywallController],
+  controllers: [],
   providers: [PaywallService],
   exports: [PaywallService],
 })

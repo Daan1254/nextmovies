@@ -4,6 +4,7 @@ import { InjectStripe } from 'nestjs-stripe';
 import { Timestamp } from '../../typeorm/timestamp.entity';
 import { StripeWebhookBody } from './dto/stripe-body.dto';
 import { OrderService } from '../order/order.service';
+import { OrderStatus } from '../../typeorm/order.entity';
 
 @Injectable()
 export class PaywallService {
@@ -27,12 +28,11 @@ export class PaywallService {
               },
               unit_amount: price,
             },
-            quantity: 1,
           },
         ],
         mode: 'payment',
-        success_url: 'http://localhost:4242/success',
-        cancel_url: 'http://localhost:4242/cancel',
+        success_url: `${process.env.FRONT_END_URL}/success`,
+        cancel_url: `${process.env.FRONT_END_URL}/cancel`,
       },
       {
         apiKey: process.env.STRIPE_API_KEY,
@@ -43,6 +43,19 @@ export class PaywallService {
   }
 
   async handleStripeWebhook(body: StripeWebhookBody) {
-    await this.orderService.updateOrder(body.data.object.id, body.type);
+    switch (body.type) {
+      case 'checkout.session.completed': {
+        await this.orderService.updateOrderStatus(
+          OrderStatus.COMPLETED,
+          body.data.object.id,
+        );
+      }
+      default: {
+        await this.orderService.updateOrderStatus(
+          OrderStatus.FAILED,
+          body.data.object.id,
+        );
+      }
+    }
   }
 }

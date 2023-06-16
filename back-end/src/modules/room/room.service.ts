@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Room, Seat } from '../../typeorm';
 import { Repository } from 'typeorm';
+import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
 
 @Injectable()
 export class RoomService {
@@ -69,5 +70,45 @@ export class RoomService {
       seat.order = null;
       await this.seatRepository.save(seat);
     }
+  }
+
+  async getRoom(uuid: string) {
+    const room = await this.roomRepository.findOne({
+      where: {
+        uuid,
+      },
+    });
+
+    if (!room) {
+      throw new NotFoundException('Room not found');
+    }
+
+    return room;
+  }
+
+  async isRoomAvailable(uuid: string, startDate: Date, endDate: Date) {
+    const room = await this.roomRepository.findOne({
+      where: {
+        uuid,
+      },
+    });
+
+    if (!room) {
+      throw new NotFoundException('Room not found');
+    }
+
+    const isAvailable = await this.roomRepository
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.timestamps', 'timestamp')
+      .where('room.uuid = :uuid', { uuid })
+      .andWhere(':endDate >= timestamp.startDate', { endDate })
+      .andWhere(':startDate <= timestamp.endDate', { startDate })
+      .getCount();
+
+    if (isAvailable !== 0) {
+      throw new BadRequestException('Room not available');
+    }
+
+    return room;
   }
 }

@@ -8,6 +8,6 @@ import { Movie } from '../../typeorm';
   imports: [TypeOrmModule.forFeature([Movie])],
   controllers: [MovieController],
   providers: [MovieService],
-  exports: [],
+  exports: [MovieService],
 })
 export class MovieModule {}

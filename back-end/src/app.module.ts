@@ -10,6 +10,7 @@ import { MovieModule } from './modules/movie/movie.module';
 import { UserModule } from './modules/user/user.module';
 import { RoomModule } from './modules/room/room.module';
 import { BravoMailModule } from './modules/bravo-mail/bravo-mail.module';
+import { TimestampModule } from './modules/timestamp/timestamp.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { BravoMailModule } from './modules/bravo-mail/bravo-mail.module';
     UserModule,
     RoomModule,
     BravoMailModule,
+    TimestampModule,
   ],
   controllers: [AppController],
   providers: [AppService],

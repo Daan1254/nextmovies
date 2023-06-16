@@ -48,5 +48,30 @@ export class MovieService {
         uuid,
       },
     });
+
+    if (!movie) {
+      throw new NotFoundException('Movie not found');
+    }
+
+    movie.title = body.title;
+    movie.description = body.description;
+    movie.thumbnail = body.thumbnail;
+    movie.isExplicit = body.isExplicit;
+
+    return await this.movieRepository.save(movie);
+  }
+
+  async deleteMovie(uuid: string) {
+    const movie = await this.movieRepository.findOne({
+      where: {
+        uuid,
+      },
+    });
+
+    if (!movie) {
+      throw new NotFoundException('Movie not found');
+    }
+
+    return await this.movieRepository.softDelete(movie);
   }
 }
