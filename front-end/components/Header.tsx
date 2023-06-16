@@ -12,18 +12,18 @@ let navigation = [
 export default function Page() {
   return (
     <Popover className="relative bg-black">
-      <div className="flex justify-between items-center px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
+      <div className="flex justify-between items-center px-4 pt-4 sm:px-6 md:justify-start md:space-x-10">
         <div>
           <a href="/">
             <span className="sr-only">NextMovies</span>
             <Image
-            className="h-24 w-auto"
+            className="h-16 w-auto"
             src={logoSVG}
             alt='NextMovies Logo' />
           </a>
         </div>
         <div className="-mr-2 -my-2 md:hidden">
-          <Popover.Button className="bg-black rounded-md p-2 inline-flex items-center justify-center text-black hover:text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+          <Popover.Button className="bg-black rounded-md p-2 inline-flex items-center justify-center text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
             <span className="sr-only">Open menu</span>
             <Bars3Icon className="h-12 w-12 text-white" aria-hidden="true" />
           </Popover.Button>
@@ -53,7 +53,7 @@ export default function Page() {
             <div className="py-6 px-5">
               <div className="grid grid-cols-2 gap-4">
                 {navigation.map((link) => (
-                  <a key={link.name} href={link.href} className="text-base font-medium text-gray-900 hover:text-gray-700">
+                  <a key={link.name} href={link.href} className="text-base font-medium text-white hover:text-gray-500">
                     {link.name}
                   </a>
                 ))}
