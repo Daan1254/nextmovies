@@ -18,7 +18,15 @@ export interface Timestamp{
   price: number;
   movie: Movie | null;
   // orders: Order[];
-  // room: Room;
+  room: Room;
+}
+
+export interface Room{
+  uuid: string;
+  name: string;
+  columns: number;
+  rows: number;
+  timestamps: Timestamp[] | null;
 }
 
 const movie: Movie = {
@@ -33,13 +41,27 @@ const movie: Movie = {
           endDate: new Date('June 16, 2023 23:00:00'),
           price: 20,
           movie: null,
+          room: {
+              uuid: "1",
+              name: "Zaal 1",
+              columns: 10,
+              rows: 10,
+              timestamps: null
+          }
       },
       {
           uuid: "2",
-          startDate: new Date('June 16, 2023 20:00:00'),
-          endDate: new Date('June 16, 2023 23:30:00'),
+          startDate: new Date('June 16, 2023 23:30:00'),
+          endDate: new Date('June 17, 2023 03:00:00'),
           price: 20,
           movie: null,
+          room: {
+              uuid: "2",
+              name: "Zaal 2",
+              columns: 5,
+              rows: 5,
+              timestamps: null
+          }
       },
       {
           uuid: "3",
@@ -47,6 +69,13 @@ const movie: Movie = {
           endDate: new Date('June 17, 2023 23:00:00'),
           price: 20,
           movie: null,
+          room: {
+              uuid: "1",
+              name: "Zaal 1",
+              columns: 10,
+              rows: 10,
+              timestamps: null
+          }
       },
   ],
 };
@@ -98,7 +127,7 @@ export default function Page() {
                             <div className="border border-white rounded-lg w-max px-4 py-1 flex flex-row gap-4 hover:border-black hover:bg-white hover:text-black transition-all duration-300">
                                 <div>
                                     <p>{FormatTime(timestamp.startDate)} - {FormatTime(timestamp.endDate)}</p>
-                                    <p>Zaal 2</p>
+                                    <p>{timestamp.room.name}</p>
                                 </div>
                                 <ChevronRightIcon className="w-6"></ChevronRightIcon>
                             </div>
