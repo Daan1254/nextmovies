@@ -8,6 +8,7 @@ import { PaywallModule } from './modules/paywall/paywall.module';
 import { OrderModule } from './modules/order/order.module';
 import { MovieModule } from './modules/movie/movie.module';
 import { UserModule } from './modules/user/user.module';
+import { RoomModule } from './modules/room/room.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UserModule } from './modules/user/user.module';
     OrderModule,
     MovieModule,
     UserModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

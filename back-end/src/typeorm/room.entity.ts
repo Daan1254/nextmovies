@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Seat } from './seat.entity';
+import { Timestamp } from './timestamp.entity';
 
 @Entity()
 export class Room {
@@ -17,4 +18,7 @@ export class Room {
 
   @OneToMany(() => Seat, (seat) => seat.room)
   seats: Seat[];
+
+  @OneToMany(() => Timestamp, (timestamp) => timestamp.room)
+  timestamps: Timestamp[];
 }

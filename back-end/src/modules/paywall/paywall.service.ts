@@ -1,22 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Stripe } from 'stripe';
 import { InjectStripe } from 'nestjs-stripe';
+import { Timestamp } from '../../typeorm/timestamp.entity';
+import { StripeWebhookBody } from './dto/stripe-body.dto';
+import { OrderService } from '../order/order.service';
 
 @Injectable()
 export class PaywallService {
-  constructor(@InjectStripe() private readonly stripeClient: Stripe) {}
+  constructor(
+    @InjectStripe() private readonly stripeClient: Stripe,
+    @Inject(forwardRef(() => OrderService))
+    private readonly orderService: OrderService,
+  ) {}
 
-  async createPayment() {
+  async createPayment(timestamp: Timestamp, price: number) {
     const session = await this.stripeClient.checkout.sessions.create(
       {
         line_items: [
           {
             price_data: {
-              currency: 'usd',
+              currency: 'eur',
               product_data: {
-                name: 'Jason',
+                name: timestamp.movie.title,
+                images: [timestamp.movie.thumbnail],
+                description: timestamp.movie.description,
               },
-              unit_amount: 2000,
+              unit_amount: price,
             },
             quantity: 1,
           },
@@ -30,6 +39,10 @@ export class PaywallService {
       },
     );
 
-    return session.url;
+    return session;
+  }
+
+  async handleStripeWebhook(body: StripeWebhookBody) {
+    await this.orderService.updateOrder(body.data.object.id, body.type);
   }
 }

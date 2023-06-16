@@ -20,6 +20,11 @@ export class Movie {
   @Column({
     nullable: false,
   })
+  thumbnail: string;
+
+  @Column({
+    nullable: false,
+  })
   description: string;
 
   @Column({
