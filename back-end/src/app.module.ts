@@ -9,6 +9,7 @@ import { OrderModule } from './modules/order/order.module';
 import { MovieModule } from './modules/movie/movie.module';
 import { UserModule } from './modules/user/user.module';
 import { RoomModule } from './modules/room/room.module';
+import { BravoMailModule } from './modules/bravo-mail/bravo-mail.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { RoomModule } from './modules/room/room.module';
     MovieModule,
     UserModule,
     RoomModule,
+    BravoMailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

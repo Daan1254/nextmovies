@@ -63,4 +63,11 @@ export class RoomService {
 
     return await this.seatRepository.save(seats);
   }
+
+  async removeSeats(seats: Seat[]) {
+    for (const seat of seats) {
+      seat.order = null;
+      await this.seatRepository.save(seat);
+    }
+  }
 }
