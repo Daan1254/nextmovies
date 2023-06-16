@@ -96,7 +96,7 @@ export class OrderService {
       return await this.orderRepository.save(order);
 
       await this.roomService.removeSeats(order.seats);
-      return await this.orderRepository.softDelete(order);
+      return await this.orderRepository.softDelete(order.uuid);
     }
   }
 }

@@ -72,6 +72,6 @@ export class MovieService {
       throw new NotFoundException('Movie not found');
     }
 
-    return await this.movieRepository.softDelete(movie);
+    return await this.movieRepository.softDelete(movie.uuid);
   }
 }

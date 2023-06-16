@@ -86,7 +86,12 @@ export class RoomService {
     return room;
   }
 
-  async isRoomAvailable(uuid: string, startDate: Date, endDate: Date) {
+  async isRoomAvailable(
+    uuid: string,
+    startDate: Date,
+    endDate: Date,
+    timestampUuid?: string,
+  ) {
     const room = await this.roomRepository.findOne({
       where: {
         uuid,
@@ -103,6 +108,7 @@ export class RoomService {
       .where('room.uuid = :uuid', { uuid })
       .andWhere(':endDate >= timestamp.startDate', { endDate })
       .andWhere(':startDate <= timestamp.endDate', { startDate })
+      .andWhere('timestamp.uuid != :timestampUuid', { timestampUuid })
       .getCount();
 
     if (isAvailable !== 0) {

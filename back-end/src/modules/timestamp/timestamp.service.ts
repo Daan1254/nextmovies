@@ -6,6 +6,7 @@ import { CreateEditTimestampDto } from './dto/create-edit-timestamp.dto';
 import { MovieService } from '../movie/movie.service';
 import { RoomService } from '../room/room.service';
 import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
+import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 
 @Injectable()
 export class TimestampService {
@@ -47,5 +48,48 @@ export class TimestampService {
     }
 
     return await this.timestampRepository.save(timestamp);
+  }
+
+  async editTimestamp(body: CreateEditTimestampDto) {
+    const timestamp = await this.timestampRepository.findOne({
+      where: {
+        uuid: body.uuid,
+      },
+    });
+
+    if (!timestamp) {
+      throw new NotFoundException('Timestamp not found');
+    }
+
+    const movie = await this.movieService.getMovie(body.movieUuid);
+
+    const room = await this.roomService.isRoomAvailable(
+      body.roomUuid,
+      body.startDate,
+      body.endDate,
+      timestamp.uuid,
+    );
+
+    timestamp.room = room;
+    timestamp.startDate = body.startDate;
+    timestamp.endDate = body.endDate;
+    timestamp.price = body.price;
+    timestamp.movie = movie;
+
+    return await this.timestampRepository.save(timestamp);
+  }
+
+  async deleteTimestamp(uuid: string) {
+    const timestamp = await this.timestampRepository.findOne({
+      where: {
+        uuid,
+      },
+    });
+
+    if (!timestamp) {
+      throw new NotFoundException('Timestamp not found');
+    }
+
+    return await this.timestampRepository.softDelete(timestamp.uuid);
   }
 }
