@@ -14,6 +14,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { RoomService } from '../room/room.service';
 import { TimestampService } from '../timestamp/timestamp.service';
 import { OrderStatus } from '../../typeorm/order.entity';
+import { BravoMailService } from '../bravo-mail/bravo-mail.service';
 
 @Injectable()
 export class OrderService {
@@ -24,6 +25,7 @@ export class OrderService {
     private readonly userService: UserService,
     private readonly roomService: RoomService,
     private readonly timestampService: TimestampService,
+    private readonly bravoMailService: BravoMailService,
   ) {}
 
   async getOrder(uuid: string) {
@@ -76,7 +78,25 @@ export class OrderService {
   }
 
   async updateOrder(id: string, type: string) {
+    const order = await this.orderRepository.findOne({
+      where: { stripeId: id },
+      relations: ['user'],
+    });
     switch (type) {
+      case 'checkout.session.completed': {
+        order.status = OrderStatus.COMPLETED;
+        await this.bravoMailService.sendMail(
+          order.user.email,
+          'Thanks for your order at NextMovies',
+          process.env.FRONT_END_URL + '/order/' + order.uuid,
+        );
+        return await this.orderRepository.save(order);
+      }
+      default: {
+        order.status = OrderStatus.FAILED;
+        await this.roomService.removeSeats(order.seats);
+        return await this.orderRepository.softDelete(order);
+      }
     }
   }
 }

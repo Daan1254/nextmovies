@@ -7,6 +7,7 @@ import { Order } from '../../typeorm';
 import { UserModule } from '../user/user.module';
 import { RoomModule } from '../room/room.module';
 import { TimestampModule } from '../timestamp/timestamp.module';
+import { BravoMailModule } from '../bravo-mail/bravo-mail.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TimestampModule } from '../timestamp/timestamp.module';
     TimestampModule,
     TypeOrmModule.forFeature([Order]),
     forwardRef(() => PaywallModule),
+    BravoMailModule,
   ],
   controllers: [OrderController],
   providers: [OrderService],
