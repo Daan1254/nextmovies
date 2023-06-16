@@ -13,6 +13,6 @@ import { PaywallService } from './paywall.service';
   ],
   controllers: [PaywallController],
   providers: [PaywallService],
-  exports: [],
+  exports: [PaywallService],
 })
 export class PaywallModule {}

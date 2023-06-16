@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
+import { Timestamp } from './timestamp.entity';
 
 export enum OrderStatus {
   PENDING = 'PENDING',
@@ -18,6 +19,9 @@ export class Order {
   })
   status: OrderStatus;
 
-  @OneToMany(() => User, (user) => user.order)
+  @ManyToOne(() => User, (user) => user.order)
   user: User;
+
+  @ManyToOne(() => Timestamp, (timestamp) => timestamp.orders)
+  timestamp: Timestamp;
 }

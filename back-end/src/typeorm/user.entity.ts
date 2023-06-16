@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from './order.entity';
 
 @Entity()
@@ -17,8 +11,7 @@ export class User {
   })
   email: string;
 
-  @ManyToOne(() => Order, (order) => order.user)
-  @JoinColumn()
+  @OneToMany(() => Order, (order) => order.user)
   order: Order;
 
   @Column({
