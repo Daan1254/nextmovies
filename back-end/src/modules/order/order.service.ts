@@ -76,7 +76,20 @@ export class OrderService {
   }
 
   async updateOrder(id: string, type: string) {
+    const order = await this.orderRepository.findOne({
+      where: { stripeId: id },
+      relations: ['user'],
+    });
     switch (type) {
+      case 'checkout.session.completed': {
+        order.status = OrderStatus.COMPLETED;
+
+        return await this.orderRepository.save(order);
+      }
+      default: {
+        order.status = OrderStatus.FAILED;
+        return await this.orderRepository.softDelete(order);
+      }
     }
   }
 }
