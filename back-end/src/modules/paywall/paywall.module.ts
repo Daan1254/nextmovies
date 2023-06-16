@@ -3,6 +3,7 @@ import { StripeModule } from 'nestjs-stripe';
 import * as process from 'process';
 import { PaywallService } from './paywall.service';
 import { OrderModule } from '../order/order.module';
+import { PaywallController } from './paywall.controller';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { OrderModule } from '../order/order.module';
     }),
     forwardRef(() => OrderModule),
   ],
-  controllers: [],
+  controllers: [PaywallController],
   providers: [PaywallService],
   exports: [PaywallService],
 })
