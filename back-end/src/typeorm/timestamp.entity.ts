@@ -8,6 +8,7 @@ import {
 import { Movie } from './movie.entity';
 import { Order } from './order.entity';
 import { Room } from './room.entity';
+import { DeleteDateColumn } from 'typeorm/decorator/columns/DeleteDateColumn';
 
 @Entity()
 export class Timestamp {
@@ -31,4 +32,7 @@ export class Timestamp {
 
   @ManyToOne(() => Room, (room) => room.timestamps)
   room: Room;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
