@@ -123,7 +123,7 @@ export default function Page() {
                 <h3>{day}</h3>
                 <div className="flex flex-row gap-4">
                     {groupedTimestamps[day].map(timestamp => (
-                        <Link key={timestamp.uuid} href={'google.com'}>
+                        <Link key={timestamp.uuid} href={{ pathname: `timestamp/${timestamp.uuid}` }}>
                             <div className="border border-white rounded-lg w-max px-4 py-1 flex flex-row gap-4 hover:border-black hover:bg-white hover:text-black transition-all duration-300">
                                 <div>
                                     <p>{FormatTime(timestamp.startDate)} - {FormatTime(timestamp.endDate)}</p>
