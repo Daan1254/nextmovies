@@ -11,6 +11,7 @@ import { UserModule } from './modules/user/user.module';
 import { RoomModule } from './modules/room/room.module';
 import { BravoMailModule } from './modules/bravo-mail/bravo-mail.module';
 import { TimestampModule } from './modules/timestamp/timestamp.module';
+import { SettingsModule } from './modules/settings/settings.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { TimestampModule } from './modules/timestamp/timestamp.module';
     RoomModule,
     BravoMailModule,
     TimestampModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Timestamp } from './timestamp.entity';
+import { Settings } from './settings.module';
 
 @Entity()
 export class Movie {
@@ -34,6 +35,9 @@ export class Movie {
 
   @OneToMany(() => Timestamp, (timestamps) => timestamps.movie)
   timestamps: Timestamp;
+
+  @OneToMany(() => Settings, (setting) => setting.featuredMovie)
+  settings: Settings;
 
   @DeleteDateColumn()
   deletedAt?: Date;
