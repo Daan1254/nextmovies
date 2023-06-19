@@ -17,7 +17,7 @@ export class SettingsService {
     const settings = await this.settingsRepository.find();
 
     if (settings.length === 0) {
-      await this.createSettings();
+      settings[0] = await this.createSettings();
     }
 
     return settings[0];
@@ -27,7 +27,7 @@ export class SettingsService {
     const settings = await this.settingsRepository.find();
 
     if (settings.length === 0) {
-      await this.createSettings();
+      settings[0] = await this.createSettings();
     }
 
     const movie = await this.movieService.getMovie(body.featuredMovieUuid);

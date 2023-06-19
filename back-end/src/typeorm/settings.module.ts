@@ -9,5 +9,5 @@ export class Settings {
   uuid: string;
 
   @ManyToOne(() => Movie, (movie) => movie.settings)
-  featuredMovie: Movie;
+  featuredMovie?: Movie;
 }

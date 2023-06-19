@@ -37,7 +37,7 @@ export class Movie {
   timestamps: Timestamp;
 
   @OneToMany(() => Settings, (setting) => setting.featuredMovie)
-  settings: Settings;
+  settings?: Settings;
 
   @DeleteDateColumn()
   deletedAt?: Date;
