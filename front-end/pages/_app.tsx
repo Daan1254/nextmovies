@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
-export const databaseUrl = "https://afe5-145-100-157-235.ngrok-free.app/api";
+export const databaseUrl = "http://localhost:8888/api";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
