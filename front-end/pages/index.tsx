@@ -63,10 +63,9 @@ export default function Home({
                 <Image
                   src={movie.thumbnail}
                   alt={movie.uuid}
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  className="absolute lg:static inset-0 w-full h-full object-center object-cover group-hover:opacity-50 opacity-80 rounded-lg"
+                  width={646}
+                  height={2048}
+                  className="aspect-[2/3] absolute lg:static inset-0 w-full h-full object-center object-cover group-hover:opacity-50 opacity-80 rounded-lg"
                 />
                 <div className="absolute bottom-0 left-0 p-2 text-white text-sm lg:text-base">
                   <h3 className="font-medium">{movie.name}</h3>
