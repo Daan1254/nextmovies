@@ -14,7 +14,9 @@ export class SettingsService {
   ) {}
 
   async getSettings() {
-    const settings = await this.settingsRepository.find();
+    const settings = await this.settingsRepository.find({
+      relations: ['featuredMovie'],
+    });
 
     if (settings.length === 0) {
       settings[0] = await this.createSettings();
