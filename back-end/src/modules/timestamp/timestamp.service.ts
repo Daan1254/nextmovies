@@ -22,7 +22,7 @@ export class TimestampService {
       where: {
         uuid,
       },
-      relations: ['movie', 'orders', 'room'],
+      relations: ['movie', 'orders', 'room', 'room.seats', 'room.seats.order'],
     });
   }
 

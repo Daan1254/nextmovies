@@ -17,6 +17,7 @@ export class MovieService {
       where: {
         uuid,
       },
+      relations: ['timestamps', 'timestamps.room'],
     });
 
     if (!movie) {

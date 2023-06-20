@@ -18,3 +18,11 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.screen {
+    border-radius: 0% 0% 150% 150%/0% 0% 40% 40%;
+}
+
+.no-events {
+    pointer-events: none;
+}

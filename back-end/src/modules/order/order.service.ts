@@ -61,20 +61,27 @@ export class OrderService {
 
     const price = seats.length * timestamp.price;
 
-    const payment = await this.paywallService.createPayment(timestamp, price);
-
     const order = await this.orderRepository.create({
       user,
       timestamp,
       seats,
       price,
-      stripeId: payment.id,
       status: OrderStatus.PENDING,
     });
 
+    const payment = await this.paywallService.createPayment(
+      timestamp,
+      price,
+      order,
+    );
+
+    order.stripeId = payment.id;
+
     await this.orderRepository.save(order);
 
-    return payment.url;
+    return {
+      redirectUrl: payment.url,
+    };
   }
 
   async updateOrderStatus(status: OrderStatus, id: string) {

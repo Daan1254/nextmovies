@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common/decorators/core/controller.decorator'
 import { TimestampService } from './timestamp.service';
 import {
   Delete,
+  Get,
   Post,
   Put,
 } from '@nestjs/common/decorators/http/request-mapping.decorator';
@@ -18,6 +19,10 @@ import { ParseUUIDPipe } from '@nestjs/common/pipes/parse-uuid.pipe';
 export class TimestampController {
   constructor(private readonly timestampService: TimestampService) {}
 
+  @Get(':uuid')
+  async getTimestamp(@Param('uuid', ParseUUIDPipe) uuid: string) {
+    return await this.timestampService.getTimestamp(uuid);
+  }
   @Post()
   async createTimestamp(@Body() body: CreateEditTimestampDto) {
     return await this.timestampService.createTimestamp(body);

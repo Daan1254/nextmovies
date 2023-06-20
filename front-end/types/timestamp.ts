@@ -3,10 +3,10 @@ import { Room } from "@/types/room";
 
 export interface Timestamp {
   uuid: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   price: number;
-  movie: Movie | null;
+  movie: Movie;
   // orders: Order[];
   room: Room;
 }

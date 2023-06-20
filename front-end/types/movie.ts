@@ -2,7 +2,7 @@ import { Timestamp } from "@/types/timestamp";
 
 export interface Movie {
   uuid: string;
-  name: string;
+  title: string;
   description: string;
   isExplicit: boolean;
   thumbnail: string;

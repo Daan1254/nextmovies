@@ -4,7 +4,7 @@ import { InjectStripe } from 'nestjs-stripe';
 import { Timestamp } from '../../typeorm/timestamp.entity';
 import { StripeWebhookBody } from './dto/stripe-body.dto';
 import { OrderService } from '../order/order.service';
-import { OrderStatus } from '../../typeorm/order.entity';
+import { Order, OrderStatus } from '../../typeorm/order.entity';
 
 @Injectable()
 export class PaywallService {
@@ -14,7 +14,7 @@ export class PaywallService {
     private readonly orderService: OrderService,
   ) {}
 
-  async createPayment(timestamp: Timestamp, price: number) {
+  async createPayment(timestamp: Timestamp, price: number, order: Order) {
     const session = await this.stripeClient.checkout.sessions.create(
       {
         line_items: [
@@ -22,17 +22,19 @@ export class PaywallService {
             price_data: {
               currency: 'eur',
               product_data: {
-                name: timestamp.movie.title,
+                name: `${order.seats.length}x ${timestamp.movie.title}`,
                 images: [timestamp.movie.thumbnail],
                 description: timestamp.movie.description,
               },
               unit_amount: price,
             },
+            quantity: 1,
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.FRONT_END_URL}/success`,
-        cancel_url: `${process.env.FRONT_END_URL}/cancel`,
+        success_url: `${process.env.FRONT_END_URL}/order/${order.uuid}`,
+        cancel_url: `${process.env.FRONT_END_URL}/order/${order.uuid}`,
+        client_reference_id: order.uuid,
       },
       {
         apiKey: process.env.STRIPE_API_KEY,

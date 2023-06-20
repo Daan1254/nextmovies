@@ -1,96 +1,64 @@
-import Thumbnail from "@/public/thumbnail.jpeg";
 import Image from "next/image";
-import Link from "next/link";
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { Movie } from "@/types/movie";
 import { Timestamp } from "@/types/timestamp";
+import { databaseUrl } from "@/pages/_app";
+import { GetServerSideProps } from "next/types";
+import Link from "next/link";
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
 
-const movie: Movie = {
-  uuid: "1",
-  name: "Star Wars: The Rise of Tabbonemok.",
-  description:
-    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusantium illo iste dicta, repellat, odio sapiente eveniet libero praesentium, nemo voluptatem similique nam nostrum amet quos debitis odit quam ullam consequuntur!",
-  isExplicit: true,
-  thumbnail: "",
-  timestamps: [
-    {
-      uuid: "1",
-      startDate: new Date("June 16, 2023 20:00:00"),
-      endDate: new Date("June 16, 2023 23:00:00"),
-      price: 20,
-      movie: null,
-      room: {
-        uuid: "1",
-        name: "Zaal 1",
-        columns: 10,
-        rows: 10,
-        timestamps: [],
-      },
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const movieResponse = await fetch(
+    `${databaseUrl}/movie/${context.params?.uuid}`
+  );
+
+  const movie: Movie = await movieResponse.json();
+
+  return {
+    props: {
+      movie,
     },
-    {
-      uuid: "2",
-      startDate: new Date("June 16, 2023 23:30:00"),
-      endDate: new Date("June 17, 2023 03:00:00"),
-      price: 20,
-      movie: null,
-      room: {
-        uuid: "2",
-        name: "Zaal 2",
-        columns: 5,
-        rows: 5,
-        timestamps: [],
-      },
-    },
-    {
-      uuid: "3",
-      startDate: new Date("June 17, 2023 20:00:00"),
-      endDate: new Date("June 17, 2023 23:00:00"),
-      price: 20,
-      movie: null,
-      room: {
-        uuid: "1",
-        name: "Zaal 1",
-        columns: 10,
-        rows: 10,
-        timestamps: [],
-      },
-    },
-  ],
+  };
 };
 
-function GroupByDay(timestamps: Timestamp[]) {
-  return timestamps.reduce<Record<string, Timestamp[]>>((groups, timestamp) => {
-    const day = timestamp.startDate.toDateString();
-    if (!groups[day]) {
-      groups[day] = [];
-    }
-    groups[day].push(timestamp);
-    return groups;
-  }, {});
+function groupByDay(timestamps: Timestamp[]) {
+  return timestamps?.reduce<Record<string, Timestamp[]>>(
+    (groups, timestamp) => {
+      const date = new Date(timestamp.startDate);
+      const day = date.toDateString();
+      if (!groups[day]) {
+        groups[day] = [];
+      }
+      groups[day].push(timestamp);
+      return groups;
+    },
+    {}
+  );
 }
 
-function FormatTime(date: Date) {
+function FormatTime(dateString: string) {
+  const date = new Date(dateString);
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
 }
 
-export default function Page() {
-  const groupedTimestamps = GroupByDay(movie.timestamps);
+export default function Page({ movie }: { movie: Movie }) {
+  console.log(movie);
+  const groupedTimestamps = groupByDay(movie.timestamps);
 
   return (
     <main className="container mx-auto flex flex-col sm:grid sm:grid-cols-2 gap-4 p-6">
       <div className="relative">
         <Image
-          src={Thumbnail}
-          alt="stur wurs"
+          src={movie.thumbnail}
+          alt={movie.title}
           width={0}
           height={0}
           sizes="100vw"
           className="w-full h-96 object-center object-cover rounded-lg opacity-70 lg:opacity-100"
         />
         <div className="absolute bottom-0 left-0 p-2 lg:static">
-          <h1 className="text-3xl">{movie.name}</h1>
+          <h1 className="text-3xl">{movie.title}</h1>
           <p>{movie.description}</p>
         </div>
       </div>
@@ -98,7 +66,7 @@ export default function Page() {
         {Object.keys(groupedTimestamps).map((day) => (
           <div className="border-t border-white py-2" key={day}>
             <h3>{day}</h3>
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               {groupedTimestamps[day].map((timestamp) => (
                 <Link
                   key={timestamp.uuid}
