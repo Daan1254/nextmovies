@@ -31,47 +31,52 @@ export default function Home({
 }) {
   return (
     <>
-      <div className="relative">
-        <img
-          src={settings?.featuredMovie?.thumbnail}
-          alt={settings?.featuredMovie?.uuid}
-          className="mb-8 hidden md:block w-full max-h-96 object-cover"
-          style={{
-            zIndex: 1,
-          }}
-        />
-        <div
-          className="absolute hidden md:block top-0 left-0 w-full h-48 bg-gradient-to-b from-black to-transparent"
-          style={{
-            zIndex: 2,
-          }}
-        ></div>
-      </div>
-
+      {settings?.featuredMovie && (
+        <div className="relative">
+          <img
+            src={settings?.featuredMovie?.thumbnail}
+            alt={settings?.featuredMovie?.uuid}
+            className="mb-8 hidden md:block w-full max-h-96 object-cover"
+            style={{
+              zIndex: 1,
+            }}
+          />
+          <div
+            className="absolute hidden md:block top-0 left-0 w-full h-48 bg-gradient-to-b from-black to-transparent"
+            style={{
+              zIndex: 2,
+            }}
+          ></div>
+        </div>
+      )}
       <div className="container mx-auto flex-1">
         <div className="p-8  grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-          {movies.map((movie: Movie) => (
-            <Link
-              key={movie.uuid}
-              href={{ pathname: `/movie/${movie.uuid}` }}
-              className="group relative h-48 min-h-full col-span-2 md:col-span-3 lg:col-span-1 lg:h-full"
-            >
-              <Image
-                src={movie.thumbnail}
-                alt={movie.uuid}
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="absolute lg:static inset-0 w-full h-full object-center object-cover group-hover:opacity-50 opacity-80 rounded-lg"
-              />
-              <div className="absolute bottom-0 left-0 p-2 text-white text-sm lg:text-base">
-                <h3 className="font-medium">{movie.name}</h3>
-                <p className="mt-1 text-sm italic text-gray-200 line-clamp-3">
-                  {movie.description}
-                </p>
-              </div>
-            </Link>
-          ))}
+          {movies.length > 0 ? (
+            movies.map((movie: Movie) => (
+              <Link
+                key={movie.uuid}
+                href={{ pathname: `/movie/${movie.uuid}` }}
+                className="group relative h-48 min-h-full col-span-2 md:col-span-3 lg:col-span-1 lg:h-full"
+              >
+                <Image
+                  src={movie.thumbnail}
+                  alt={movie.uuid}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="absolute lg:static inset-0 w-full h-full object-center object-cover group-hover:opacity-50 opacity-80 rounded-lg"
+                />
+                <div className="absolute bottom-0 left-0 p-2 text-white text-sm lg:text-base">
+                  <h3 className="font-medium">{movie.name}</h3>
+                  <p className="mt-1 text-sm italic text-gray-200 line-clamp-3">
+                    {movie.description}
+                  </p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <h1>No movies found...</h1>
+          )}
         </div>
       </div>
     </>
