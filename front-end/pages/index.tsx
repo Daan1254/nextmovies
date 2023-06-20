@@ -32,9 +32,11 @@ export default function Home({
   return (
     <>
       <div className="relative">
-        <img
+        <Image
           src={settings?.featuredMovie?.thumbnail}
           alt={settings?.featuredMovie?.uuid}
+          width={2048}
+          height={646}
           className="mb-8 hidden md:block w-full max-h-96 object-cover"
           style={{
             zIndex: 1,
