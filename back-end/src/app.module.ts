@@ -12,6 +12,7 @@ import { RoomModule } from './modules/room/room.module';
 import { BravoMailModule } from './modules/bravo-mail/bravo-mail.module';
 import { TimestampModule } from './modules/timestamp/timestamp.module';
 import { SettingsModule } from './modules/settings/settings.module';
+import { TicketModule } from './modules/ticket/ticket.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { SettingsModule } from './modules/settings/settings.module';
     BravoMailModule,
     TimestampModule,
     SettingsModule,
+    TicketModule,
   ],
   controllers: [AppController],
   providers: [AppService],

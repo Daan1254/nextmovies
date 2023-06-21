@@ -68,7 +68,7 @@ export default function Home({
                   className="aspect-[2/3] absolute lg:static inset-0 w-full h-full object-center object-cover group-hover:opacity-50 opacity-80 rounded-lg"
                 />
                 <div className="absolute bottom-0 left-0 p-2 text-white text-sm lg:text-base">
-                  <h3 className="font-medium">{movie.name}</h3>
+                  <h3 className="font-medium">{movie.title}</h3>
                   <p className="mt-1 text-sm italic text-gray-200 line-clamp-3">
                     {movie.description}
                   </p>

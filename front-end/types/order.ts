@@ -1,6 +1,7 @@
 import { User } from "@/types/user";
 import { SeatInterface } from "@/types/seat";
 import { Timestamp } from "@/types/timestamp";
+import { Ticket } from "@/types/ticket";
 
 export enum OrderStatus {
   PENDING = "PENDING",
@@ -18,4 +19,5 @@ export interface Order {
   stripeId?: string;
   seats: SeatInterface[];
   timestamp: Timestamp;
+  tickets: Ticket[];
 }

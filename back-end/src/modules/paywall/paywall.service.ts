@@ -45,19 +45,17 @@ export class PaywallService {
   }
 
   async handleStripeWebhook(body: StripeWebhookBody) {
-    switch (body.type) {
-      case 'checkout.session.completed': {
-        await this.orderService.updateOrderStatus(
-          OrderStatus.COMPLETED,
-          body.data.object.id,
-        );
-      }
-      default: {
-        await this.orderService.updateOrderStatus(
-          OrderStatus.FAILED,
-          body.data.object.id,
-        );
-      }
+    if (body.type === 'checkout.session.completed') {
+      await this.orderService.updateOrderStatus(
+        OrderStatus.COMPLETED,
+        body.data.object.id,
+      );
+      return;
     }
+
+    await this.orderService.updateOrderStatus(
+      OrderStatus.FAILED,
+      body.data.object.id,
+    );
   }
 }

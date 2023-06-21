@@ -15,6 +15,7 @@ import { RoomService } from '../room/room.service';
 import { TimestampService } from '../timestamp/timestamp.service';
 import { OrderStatus } from '../../typeorm/order.entity';
 import { BravoMailService } from '../bravo-mail/bravo-mail.service';
+import { TicketService } from '../ticket/ticket.service';
 
 @Injectable()
 export class OrderService {
@@ -26,17 +27,33 @@ export class OrderService {
     private readonly roomService: RoomService,
     private readonly timestampService: TimestampService,
     private readonly bravoMailService: BravoMailService,
+    private readonly ticketService: TicketService,
   ) {}
 
   async getOrder(uuid: string) {
     const order = await this.orderRepository.findOne({
       where: { uuid },
-      relations: ['user'],
+      relations: [
+        'user',
+        'timestamp',
+        'timestamp.movie',
+        'timestamp.room',
+        'seats',
+        'tickets',
+      ],
     });
 
     if (!order) {
       throw new NotFoundException('Order not found');
     }
+
+    order.tickets.map(async (ticket, index) => {
+      if (!ticket.url) {
+        order.tickets[index] = await this.ticketService.refreshTicketUrl(
+          ticket,
+        );
+      }
+    });
 
     return order;
   }
@@ -61,13 +78,15 @@ export class OrderService {
 
     const price = seats.length * timestamp.price;
 
-    const order = await this.orderRepository.create({
+    let order = await this.orderRepository.create({
       user,
       timestamp,
       seats,
       price,
       status: OrderStatus.PENDING,
     });
+
+    order = await this.orderRepository.save(order);
 
     const payment = await this.paywallService.createPayment(
       timestamp,
@@ -85,11 +104,13 @@ export class OrderService {
   }
 
   async updateOrderStatus(status: OrderStatus, id: string) {
-    const order = await this.orderRepository.findOne({
+    let order = await this.orderRepository.findOne({
       where: { stripeId: id },
-      relations: ['user'],
+      relations: ['user', 'seats', 'timestamp', 'timestamp.movie'],
     });
     order.status = status;
+
+    console.log(status);
 
     if (status === OrderStatus.COMPLETED) {
       await this.bravoMailService.sendMail(
@@ -97,13 +118,14 @@ export class OrderService {
         'Thanks for your order at NextMovies',
         process.env.FRONT_END_URL + '/order/' + order.uuid,
       );
+      order = await this.orderRepository.save(order);
+      await this.ticketService.generateTickets(order);
     }
 
     if (status === OrderStatus.FAILED) {
-      return await this.orderRepository.save(order);
-
       await this.roomService.removeSeats(order.seats);
-      return await this.orderRepository.softDelete(order.uuid);
+
+      await this.orderRepository.softDelete(order.uuid);
     }
   }
 }
