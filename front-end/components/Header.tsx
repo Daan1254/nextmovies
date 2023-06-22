@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
-import { Bars3Icon } from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import logoSVG from "../public/logo.svg";
 import Link from "next/dist/client/link";
@@ -59,18 +59,24 @@ export default function Page() {
           className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
         >
           <div className="rounded-lg shadow-lg ring-1 ring-white ring-opacity-5 bg-black divide-y-2 divide-gray-50">
-            <div className="py-6 px-5">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="py-6 px-5 flex flex-row justify-between items-center">
+              <div className="grid grid-cols-2 gap-8">
                 {navigation.map((link) => (
                   <a
                     key={link.name}
                     href={link.href}
-                    className="text-base font-medium text-white hover:text-gray-500"
+                    className="text-base my-auto font-medium text-white hover:text-gray-500"
                   >
                     {link.name}
                   </a>
                 ))}
               </div>
+                <div className="-mr-3 -my-2 md:hidden">
+                  <Popover.Button className="bg-black rounded-md inline-flex items-center justify-end text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <span className="sr-only">Close menu</span>
+                    <XMarkIcon className="h-12 w-12 text-white" aria-hidden="true" />
+                  </Popover.Button>
+                </div>
             </div>
           </div>
         </Popover.Panel>
