@@ -28,9 +28,16 @@ export default function Page({ timestamp }: { timestamp: Timestamp }) {
     timestamp: timestamp,
     price: 0,
     status: OrderStatus.PENDING,
+    tickets: [],
+    user: undefined,
+    stripeId: undefined,
   });
 
   const handleToggle = (seat: SeatInterface) => {
+    if (seat.order && seat.order.status !== OrderStatus.FAILED) {
+      alert("Seat is not available");
+      return;
+    }
     if (order.seats.some((reservedSeat) => reservedSeat.uuid === seat.uuid)) {
       setOrder((prevOrder) => ({
         ...prevOrder,
