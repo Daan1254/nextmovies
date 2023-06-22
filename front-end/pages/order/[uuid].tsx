@@ -35,7 +35,7 @@ export default function Page({ order }: { order: Order }) {
       case OrderStatus.PENDING:
         return "w-1/2";
         break;
-      case OrderStatus.COMPLETED:
+      case OrderStatus.COMPLETED && order?.tickets[0]?.url:
         return "w-full";
         break;
       default:
@@ -45,7 +45,9 @@ export default function Page({ order }: { order: Order }) {
 
   function downloadTickets() {
     order.tickets.forEach((ticket) => {
-      window.open(ticket.url, "_blank");
+      if (ticket.url) {
+        window.open(ticket.url, "_blank");
+      }
     });
   }
 
@@ -93,13 +95,17 @@ export default function Page({ order }: { order: Order }) {
                       <div>
                         <dt className="font-medium text-white">Tickets</dt>
                         <dd className="mt-3 text-gray-300 space-y-3">
-                          <button
-                            type="button"
-                            className="font-medium text-white rounded  bg-blue-600 px-9 py-1"
-                            onClick={downloadTickets}
-                          >
-                            Download
-                          </button>
+                          {order?.tickets[0]?.url ? (
+                            <button
+                              type="button"
+                              className="font-medium text-white rounded  bg-blue-600 px-9 py-1"
+                              onClick={downloadTickets}
+                            >
+                              Download
+                            </button>
+                          ) : (
+                            <p>Tickets are being processed...</p>
+                          )}
                         </dd>
                       </div>
                     )}
@@ -114,7 +120,7 @@ export default function Page({ order }: { order: Order }) {
                           order.status !== OrderStatus.FAILED
                             ? "bg-blue-600"
                             : "bg-red-600"
-                        } bg-blue-600 rounded-full ${checkOrderStatus()}  `}
+                        } rounded-full ${checkOrderStatus()}  `}
                       ></div>
                     </div>
                     {order.status !== OrderStatus.FAILED ? (

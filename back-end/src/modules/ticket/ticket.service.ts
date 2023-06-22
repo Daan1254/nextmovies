@@ -28,7 +28,7 @@ export class TicketService {
                 template_uuid: 'q2ldqbhbc',
                 layers: {
                   img: {
-                    media: 'bef7c507-a4ea-4cc2-b0b8-29f554a21263',
+                    media: order.timestamp.movie.thumbnail,
                   },
                   barcode: {
                     value: '123',
