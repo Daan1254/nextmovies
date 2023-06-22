@@ -43,7 +43,6 @@ function FormatTime(dateString: string) {
 }
 
 export default function Page({ movie }: { movie: Movie }) {
-  console.log(movie);
   const groupedTimestamps = groupByDay(movie.timestamps);
 
   return (
