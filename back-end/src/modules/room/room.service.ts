@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Room, Seat } from '../../typeorm';
 import { Repository } from 'typeorm';
 import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
+import { CreateEditRoomDto } from './dto/create-edit-room.dto';
 
 @Injectable()
 export class RoomService {
@@ -116,5 +117,21 @@ export class RoomService {
     }
 
     return room;
+  }
+
+  async createRoom(body: CreateEditRoomDto) {
+    let room = this.roomRepository.create(body);
+
+    room = await this.roomRepository.save(room);
+
+    if (!room) {
+      throw new BadRequestException('Room not created');
+    }
+
+    const seats = await this.createSeats(room.uuid);
+
+    room.seats = seats;
+
+    return await this.roomRepository.save(room);
   }
 }
