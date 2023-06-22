@@ -63,30 +63,32 @@ export default function Page({ movie }: { movie: Movie }) {
         </div>
       </div>
       <div className="border-b border-white h-max pb-1">
-        {Object.keys(groupedTimestamps).map((day) => (
-          <div className="border-t border-white py-2" key={day}>
-            <h3>{day}</h3>
-            <div className="flex flex-col md:flex-row gap-4">
-              {groupedTimestamps[day].map((timestamp) => (
-                <Link
-                  key={timestamp.uuid}
-                  href={{ pathname: `timestamp/${timestamp.uuid}` }}
-                >
-                  <div className="border border-white rounded-lg w-max px-4 py-1 flex flex-row gap-4 hover:border-black hover:bg-white hover:text-black transition-all duration-300">
-                    <div>
-                      <p>
-                        {FormatTime(timestamp.startDate)} -{" "}
-                        {FormatTime(timestamp.endDate)}
-                      </p>
-                      <p>{timestamp.room.name}</p>
+        {Object.keys(groupedTimestamps)
+          .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+          .map((day) => (
+            <div className="border-t border-white py-2" key={day}>
+              <h3>{day}</h3>
+              <div className="flex flex-col md:flex-row gap-4">
+                {groupedTimestamps[day].map((timestamp) => (
+                  <Link
+                    key={timestamp.uuid}
+                    href={{ pathname: `timestamp/${timestamp.uuid}` }}
+                  >
+                    <div className="border border-white rounded-lg w-max px-4 py-1 flex flex-row gap-4 hover:border-black hover:bg-white hover:text-black transition-all duration-300">
+                      <div>
+                        <p>
+                          {FormatTime(timestamp.startDate)} -{" "}
+                          {FormatTime(timestamp.endDate)}
+                        </p>
+                        <p>{timestamp.room.name}</p>
+                      </div>
+                      <ChevronRightIcon className="w-6"></ChevronRightIcon>
                     </div>
-                    <ChevronRightIcon className="w-6"></ChevronRightIcon>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </main>
   );
