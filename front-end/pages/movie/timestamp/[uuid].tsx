@@ -98,22 +98,22 @@ export default function Page({ timestamp }: { timestamp: Timestamp }) {
 
   return (
     <main className="grid place-items-center">
-      <div className="group relative p-8 w-full">
+      <div className="group relative p-0 pb-2 sm:p-8 w-full">
         <Image
           src={timestamp.movie?.thumbnail}
           alt={timestamp.movie?.title}
           width={1000}
           height={1000}
-          className="absolute w-full lg:static hidden md:block h-56 object-center object-cover opacity-80"
+          className="w-full static h-56 object-center object-cover opacity-60"
         />
-        <div className="absolute bottom-0 left-0 p-10 text-white text-sm lg:text-base">
+        <div className="absolute bottom-0 left-0 p-10 text-white text-3xl sm:text-sm lg:text-base">
           <h3 className="font-medium">{timestamp.movie.title}</h3>
-          <p className="mt-1 text-sm italic text-gray-200 line-clamp-3">
+          <p className="mt-1 text-base sm:text-sm italic text-gray-200 line-clamp-3">
             {timestamp.movie.description}
           </p>
         </div>
       </div>
-      <div className="flex flex-row gap-2 container mx-auto">
+      <div className="flex flex-col px-4 sm:flex-row gap-2 container mx-auto">
         <div className="w-full z-50">
           <div className="grid grid-cols-6 gap-2 w-max mx-auto ">
             {timestamp.room.seats.map((seat, index) => (
@@ -157,7 +157,7 @@ export default function Page({ timestamp }: { timestamp: Timestamp }) {
           <div className="w-full flex justify-center items-center">
             {order.seats.length > 0 && (
               <button
-                className="mt-10 text-center border border-white rounded-lg w-max  px-4 py-1 flex flex-row gap-4 hover:border-black hover:bg-white hover:text-black transition-all duration-300"
+                className="mt-3 mb-5 sm:mt-10 text-center border border-white rounded-lg w-max  px-4 py-1 flex flex-row gap-4 hover:border-black hover:bg-white hover:text-black transition-all duration-300"
                 onClick={handleOrder}
               >
                 Confirm Order (€{calculateTotalPrice()})
