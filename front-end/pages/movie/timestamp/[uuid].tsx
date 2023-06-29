@@ -148,7 +148,8 @@ export default function Page({ timestamp }: { timestamp: Timestamp }) {
           <div className="flex flex-col gap-1">
             <label className="text-white">Email</label>
             <input
-              type="email"
+              type="email" 
+              pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g"
               className="px-1 py-1 bg-black rounded-lg text-white border border-white"
               onChange={handleInput}
             />
